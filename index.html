@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+    <title>Universo Capoeira - Rádio GitHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="toast" class="toast"></div>
+    <audio id="radio-audio" preload="none"></audio>
+    <div class="header">
+        <div class="status-block">v1.0.0</div>
+        <div class="logo">🎵</div>
+        <h1>Universo Capoeira</h1>
+        <div class="subtitle">Rádio GitHub • 24h</div>
+    </div>
+    <div class="container">
+        <div id="tab-inicio" class="tab active">
+            <div class="card" style="border-color:rgba(0,122,255,0.15);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>📻 Rádio <span class="badge-ios badge-green">AO VIVO</span></h3>
+                    <span id="radio-status" style="color:var(--verde); font-size:0.5rem; font-weight:600;">● NO AR</span>
+                </div>
+                <div class="radio-player">
+                    <button class="play-btn" id="radio-play-btn" onclick="toggleRadio()">▶</button>
+                    <div style="flex:1; overflow:hidden;">
+                        <div id="now-playing" style="font-weight:500; font-size:0.75rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Capoeira 24h</div>
+                        <div style="width:100%; height:2px; background:rgba(255,255,255,0.06); border-radius:10px; margin-top:3px;">
+                            <div id="radio-progress" style="width:0%; height:100%; background:var(--azul); border-radius:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:6px;">
+                    <button class="btn btn-sec" style="padding:6px; font-size:0.55rem;" onclick="pedirMusica()">🎵 Pedir</button>
+                    <button class="btn btn-github" style="padding:6px; font-size:0.55rem;" onclick="abrirStudio()">🐙 GitHub</button>
+                </div>
+                <div style="display:flex; gap:4px; margin-top:4px;">
+                    <button class="btn btn-sec" style="padding:4px 6px; font-size:0.5rem; flex:1;" onclick="verOuvintes()">👥 Ouvintes</button>
+                    <button class="btn btn-sec" style="padding:4px 6px; font-size:0.5rem; flex:1;" onclick="carregarPlaylistGitHub()">🔄 Atualizar</button>
+                </div>
+            </div>
+            <div class="card" style="border-color:#24292e;">
+                <h3>🐙 Playlist GitHub <span class="badge-ios" id="count-musicas">0</span></h3>
+                <div id="playlist-container" style="max-height:200px; overflow-y:auto;">
+                    <p style="color:var(--txt-sec); font-size:0.6rem; text-align:center;">Carregando músicas...</p>
+                </div>
+            </div>
+        </div>
+        <div id="tab-studio" class="tab">
+            <div id="studio-lock" class="lock-overlay">
+                <div class="lock-box">
+                    <div class="lock-icon">🐙</div>
+                    <h2>GitHub Studio</h2>
+                    <p>Gerenciar músicas na nuvem</p>
+                    <input type="password" id="studio-pass" placeholder="Senha" autofocus>
+                    <button class="btn btn-cyan" onclick="acessarStudio()">🔓 Acessar</button>
+                    <p class="senha-dica">Senha: 2803</p>
+                    <div id="studio-erro" style="color:var(--vermelho); font-size:0.55rem; margin-top:4px;"></div>
+                </div>
+            </div>
+            <div id="studio-painel" style="display:none;">
+                <div class="card" style="border-color:#24292e;">
+                    <h3>📤 Adicionar Música</h3>
+                    <div style="display:flex; gap:4px; margin-bottom:4px;">
+                        <input type="text" id="musica-nome" placeholder="Nome da música" style="flex:2;">
+                        <input type="text" id="musica-url" placeholder="URL do arquivo" style="flex:3;">
+                    </div>
+                    <div class="grid-2">
+                        <button class="btn btn-success" onclick="adicionarMusicaGitHub()">➕ Adicionar</button>
+                        <button class="btn btn-danger" onclick="limparPlaylistGitHub()">🗑️ Limpar</button>
+                    </div>
+                    <div id="status-github" style="font-size:0.55rem; color:var(--txt-sec); margin-top:4px;"></div>
+                </div>
+            </div>
+        </div>
+        <div id="tab-adm" class="tab">
+            <div id="adm-lock" class="lock-overlay">
+                <div class="lock-box">
+                    <div class="lock-icon">🔐</div>
+                    <h2>ADM</h2>
+                    <p>Painel administrativo</p>
+                    <input type="password" id="adm-pass" placeholder="Senha">
+                    <button class="btn btn-cyan" onclick="acessarAdm()">🔓 Acessar</button>
+                    <p class="senha-dica">Senha: 2803</p>
+                </div>
+            </div>
+            <div id="adm-painel" style="display:none;">
+                <div class="card">
+                    <h3>📊 Dashboard</h3>
+                    <div id="adm-dashboard" style="font-size:0.65rem; line-height:1.8;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="nav-bottom">
+        <button class="nav-item active" onclick="nav('inicio', this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Início
+        </button>
+        <button class="nav-item" onclick="nav('studio', this)">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/><circle cx="12" cy="12" r="2"/></svg>
+            Estúdio
+        </button>
+        <button class="nav-item" onclick="nav('adm', this)">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            ADM
+        </button>
+    </nav>
+    <script src="js/config.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/radio.js"></script>
+    <script src="js/playlist.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
