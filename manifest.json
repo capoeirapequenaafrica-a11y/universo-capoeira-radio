@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Universo Capoeira v33</title>
+  <title>Universo Capoeira v34</title>
 
   <!-- Manifest e Configurações para Web App e APK -->
   <link rel="manifest" href='data:application/manifest+json,{
@@ -85,12 +85,15 @@
     .tab-dev.active { background:#1a1a2e !important; }
     .priority-badge { position:absolute; top:-12px; right:16px; background:#e94560; padding:4px 16px; border-radius:20px; font-weight:bold; font-size:0.7rem; color:#fff; }
     .priority-max { border:3px solid #f39c12 !important; }
+    .auth-toggle { display:flex; gap:10px; margin-bottom:12px; }
+    .auth-toggle button { flex:1; padding:8px; background:#0d0d0d; border:1px solid #333; color:#aaa; border-radius:6px; font-weight:bold; cursor:pointer; }
+    .auth-toggle button.active { background:#e94560; color:#fff; border-color:#e94560; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🌀 Universo Capoeira <span style="font-size:0.7rem;color:#aaa;">v33</span></h1>
+  <h1>🌀 Universo Capoeira <span style="font-size:0.7rem;color:#aaa;">v34</span></h1>
   <div class="badge badge-off" id="radioStatus">PARADO</div>
 </header>
 
@@ -106,12 +109,33 @@
 <!-- ==================== TAB 1 – INÍCIO ==================== -->
 <div id="tab1" class="tab-content active">
   <div class="card" style="border:2px solid #e94560;">
-    <h3><i class="fas fa-sign-in-alt"></i> Entrada do Aluno</h3>
-    <div class="flex">
-      <input id="alunoNome" placeholder="Nome completo" style="flex:1;">
-      <input id="alunoSenha" type="password" placeholder="Senha" style="flex:1;">
-      <button class="btn" onclick="loginAluno()">Entrar</button>
+    <h3><i class="fas fa-user-circle"></i> Acesso do Aluno</h3>
+    
+    <div class="auth-toggle">
+      <button id="btnToggleLoginAluno" class="active" onclick="toggleAuthModoAluno('login')">Entrar (Login)</button>
+      <button id="btnToggleCadastroAluno" onclick="toggleAuthModoAluno('cadastro')">Inscrição (Primeiro Acesso)</button>
     </div>
+
+    <!-- FORMULÁRIO DE LOGIN ALUNO -->
+    <div id="formLoginAluno">
+      <input id="alunoLoginNome" placeholder="Nome ou Apelido">
+      <input id="alunoLoginSenha" type="password" placeholder="Senha">
+      <button class="btn" style="width:100%; margin-top:8px;" onclick="loginAluno()">Entrar</button>
+    </div>
+
+    <!-- FORMULÁRIO DE INSCRIÇÃO ALUNO -->
+    <div id="formCadastroAluno" style="display:none;">
+      <input id="cadAlunoNome" placeholder="Nome completo">
+      <input id="cadAlunoApelido" placeholder="Apelido na Capoeira (opcional)">
+      <select id="cadAlunoFilial">
+        <option value="">Selecione a Filial que treina...</option>
+      </select>
+      <input id="cadAlunoProfessor" placeholder="Professor com quem treina">
+      <input id="cadAlunoSenha" type="password" placeholder="Criar Senha">
+      <input id="cadAlunoSenhaConf" type="password" placeholder="Confirmar Senha">
+      <button class="btn btn-success" style="width:100%; margin-top:8px;" onclick="cadastrarAluno()">Finalizar Inscrição</button>
+    </div>
+
     <div id="alunoInfo" style="margin-top:8px; font-size:0.9rem;"></div>
   </div>
 
@@ -123,7 +147,7 @@
 
   <div class="card">
     <h3><i class="fas fa-radio"></i> Rádio 24h <span id="radioOnlineIndicator" class="status-offline" style="font-size:0.8rem;margin-left:8px;">● OFFLINE</span></h3>
-    <div class="flex" style="justify-space-between;">
+    <div class="flex" style="justify-content:space-between;">
       <span id="modoBadge" class="badge badge-off">PARADO</span>
       <span id="ouvinteCount"><i class="fas fa-headphones"></i> 0 ouvintes</span>
     </div>
@@ -212,11 +236,32 @@
 <!-- ==================== TAB 3 – PROFESSOR ==================== -->
 <div id="tab3" class="tab-content">
   <div class="card">
-    <h3><i class="fas fa-chalkboard-teacher"></i> Login Professor</h3>
-    <input id="profNome" placeholder="Nome">
-    <input id="profApelido" placeholder="Apelido">
-    <input id="profSenha" type="password" placeholder="Senha">
-    <button class="btn" onclick="loginProfessor()">Entrar</button>
+    <h3><i class="fas fa-chalkboard-teacher"></i> Área do Professor</h3>
+
+    <div class="auth-toggle">
+      <button id="btnToggleLoginProf" class="active" onclick="toggleAuthModoProf('login')">Entrar (Login)</button>
+      <button id="btnToggleCadastroProf" onclick="toggleAuthModoProf('cadastro')">Inscrição (Novo Professor)</button>
+    </div>
+
+    <!-- FORMULÁRIO DE LOGIN PROFESSOR -->
+    <div id="formLoginProf">
+      <input id="profLoginNome" placeholder="Nome ou Apelido">
+      <input id="profLoginSenha" type="password" placeholder="Senha">
+      <button class="btn" style="width:100%; margin-top:8px;" onclick="loginProfessor()">Entrar</button>
+    </div>
+
+    <!-- FORMULÁRIO DE INSCRIÇÃO PROFESSOR -->
+    <div id="formCadastroProf" style="display:none;">
+      <input id="cadProfNome" placeholder="Nome completo">
+      <input id="cadProfApelido" placeholder="Apelido / Graduação">
+      <select id="cadProfFilial">
+        <option value="">Selecione a Filial principal...</option>
+      </select>
+      <input id="cadProfSenha" type="password" placeholder="Criar Senha">
+      <input id="cadProfSenhaConf" type="password" placeholder="Confirmar Senha">
+      <button class="btn btn-success" style="width:100%; margin-top:8px;" onclick="cadastrarProfessor()">Finalizar Inscrição</button>
+    </div>
+
     <div id="profInfo" style="margin-top:8px;"></div>
   </div>
 </div>
@@ -227,7 +272,7 @@
     <h3><i class="fas fa-store"></i> Filiais & GPS</h3>
     <input id="novaFilial" placeholder="Nome da nova filial">
     <input id="gpsFilial" placeholder="Coordenadas (lat,lng)">
-    <button class="btn" onclick="adicionarFilial()">Adicionar</button>
+    <button class="btn" onclick="adicionarFilial()">Adicionar Filial</button>
     <div id="listaFiliais" style="margin-top:8px;"></div>
   </div>
 </div>
@@ -244,7 +289,6 @@
     </div>
   </div>
 
-  <!-- CARD GERAR E COMPARTILHAR APK -->
   <div class="card" style="border:2px solid #2e7d32;">
     <h3 style="color:#4caf50;"><i class="fas fa-android"></i> Pacote APK & Compartilhamento</h3>
     <p style="font-size:0.85rem; color:#ccc;">Gere o pacote para instalação no Android ou compartilhe diretamente via WhatsApp/Bluetooth.</p>
@@ -265,7 +309,7 @@
 </div>
 
 <script>
-const VERSION = 'v33';
+const VERSION = 'v34';
 let alunoLogado = null;
 let profLogado = null;
 let musicaAtual = null;
@@ -277,17 +321,165 @@ function saveData(key, data) { localStorage.setItem(key, JSON.stringify(data)); 
 
 let githubConfig = loadData('githubConfig', { token: '', repo: '' });
 let musicas = loadData('musicas', []);
-let filiais = loadData('filiais', [{nome:'Matriz', gps:'-22.9068,-43.1729'}]);
+let filiais = loadData('filiais', [{nome:'Matriz', gps:'-22.9068,-43.1729'}, {nome:'Filial Central', gps:'-22.9035,-43.1823'}]);
+let cadastrosAlunos = loadData('cadastrosAlunos', []);
+let cadastrosProfs = loadData('cadastrosProfs', []);
 
-// NAVEGAÇÃO DE ABAS
-document.querySelectorAll('.tabs button').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById(this.dataset.tab).classList.add('active');
-  });
-});
+// ATUALIZAR DROPDOWNS DE FILIAIS
+function carregarSelectFiliais() {
+  const selectAluno = document.getElementById('cadAlunoFilial');
+  const selectProf = document.getElementById('cadProfFilial');
+  
+  const options = filiais.map(f => `<option value="${f.nome}">${f.nome}</option>`).join('');
+  
+  if (selectAluno) selectAluno.innerHTML = '<option value="">Selecione a Filial que treina...</option>' + options;
+  if (selectProf) selectProf.innerHTML = '<option value="">Selecione a Filial principal...</option>' + options;
+}
+
+// TOGGLE ENTRE LOGIN E CADASTRO - ALUNO
+function toggleAuthModoAluno(modo) {
+  const formLogin = document.getElementById('formLoginAluno');
+  const formCad = document.getElementById('formCadastroAluno');
+  const btnLogin = document.getElementById('btnToggleLoginAluno');
+  const btnCad = document.getElementById('btnToggleCadastroAluno');
+
+  if (modo === 'cadastro') {
+    formLogin.style.display = 'none';
+    formCad.style.display = 'block';
+    btnLogin.classList.remove('active');
+    btnCad.classList.add('active');
+  } else {
+    formLogin.style.display = 'block';
+    formCad.style.display = 'none';
+    btnLogin.classList.add('active');
+    btnCad.classList.remove('active');
+  }
+}
+
+// TOGGLE ENTRE LOGIN E CADASTRO - PROFESSOR
+function toggleAuthModoProf(modo) {
+  const formLogin = document.getElementById('formLoginProf');
+  const formCad = document.getElementById('formCadastroProf');
+  const btnLogin = document.getElementById('btnToggleLoginProf');
+  const btnCad = document.getElementById('btnToggleCadastroProf');
+
+  if (modo === 'cadastro') {
+    formLogin.style.display = 'none';
+    formCad.style.display = 'block';
+    btnLogin.classList.remove('active');
+    btnCad.classList.add('active');
+  } else {
+    formLogin.style.display = 'block';
+    formCad.style.display = 'none';
+    btnLogin.classList.add('active');
+    btnCad.classList.remove('active');
+  }
+}
+
+// INSCRIÇÃO / CADASTRO DO ALUNO
+function cadastrarAluno() {
+  const nome = document.getElementById('cadAlunoNome').value.trim();
+  const apelido = document.getElementById('cadAlunoApelido').value.trim();
+  const filial = document.getElementById('cadAlunoFilial').value;
+  const professor = document.getElementById('cadAlunoProfessor').value.trim();
+  const senha = document.getElementById('cadAlunoSenha').value;
+  const senhaConf = document.getElementById('cadAlunoSenhaConf').value;
+
+  if (!nome || !filial || !professor || !senha) {
+    return alert('Por favor, preencha todos os campos obrigatórios.');
+  }
+
+  if (senha !== senhaConf) {
+    return alert('As senhas não coincidem. Digite novamente.');
+  }
+
+  const jaExiste = cadastrosAlunos.some(a => a.nome.toLowerCase() === nome.toLowerCase() || (apelido && a.apelido.toLowerCase() === apelido.toLowerCase()));
+  if (jaExiste) {
+    return alert('Este aluno ou apelido já possui inscrição cadastrada.');
+  }
+
+  const novoAluno = { nome, apelido: apelido || nome, filial, professor, senha };
+  cadastrosAlunos.push(novoAluno);
+  saveData('cadastrosAlunos', cadastrosAlunos);
+
+  alert('✅ Inscrição realizada com sucesso! Faça seu login.');
+  
+  // Limpar campos e mudar para tela de login
+  document.getElementById('cadAlunoNome').value = '';
+  document.getElementById('cadAlunoApelido').value = '';
+  document.getElementById('cadAlunoProfessor').value = '';
+  document.getElementById('cadAlunoSenha').value = '';
+  document.getElementById('cadAlunoSenhaConf').value = '';
+  
+  toggleAuthModoAluno('login');
+  document.getElementById('alunoLoginNome').value = apelido || nome;
+}
+
+// LOGIN DO ALUNO
+function loginAluno() {
+  const loginInput = document.getElementById('alunoLoginNome').value.trim().toLowerCase();
+  const senhaInput = document.getElementById('alunoLoginSenha').value;
+
+  if (!loginInput || !senhaInput) return alert('Digite seu nome/apelido e senha.');
+
+  const alunoEncontrado = cadastrosAlunos.find(a => 
+    (a.nome.toLowerCase() === loginInput || a.apelido.toLowerCase() === loginInput) && a.senha === senhaInput
+  );
+
+  if (alunoEncontrado) {
+    alunoLogado = alunoEncontrado.apelido || alunoEncontrado.nome;
+    document.getElementById('alunoInfo').innerHTML = `✅ Conectado como <strong>${alunoLogado}</strong> (${alunoEncontrado.filial} - Prof: ${alunoEncontrado.professor})`;
+    document.getElementById('alunoAviso').style.display = 'none';
+    document.getElementById('alunoConteudo').style.display = 'block';
+  } else {
+    alert('❌ Login ou senha incorretos! Se é seu primeiro acesso, realize sua Inscrição.');
+  }
+}
+
+// INSCRIÇÃO / CADASTRO DO PROFESSOR
+function cadastrarProfessor() {
+  const nome = document.getElementById('cadProfNome').value.trim();
+  const apelido = document.getElementById('cadProfApelido').value.trim();
+  const filial = document.getElementById('cadProfFilial').value;
+  const senha = document.getElementById('cadProfSenha').value;
+  const senhaConf = document.getElementById('cadProfSenhaConf').value;
+
+  if (!nome || !apelido || !filial || !senha) {
+    return alert('Por favor, preencha todos os campos.');
+  }
+
+  if (senha !== senhaConf) {
+    return alert('As senhas não coincidem.');
+  }
+
+  const novoProf = { nome, apelido, filial, senha };
+  cadastrosProfs.push(novoProf);
+  saveData('cadastrosProfs', cadastrosProfs);
+
+  alert('✅ Inscrição de Professor realizada com sucesso! Faça o login.');
+  
+  toggleAuthModoProf('login');
+  document.getElementById('profLoginNome').value = apelido;
+}
+
+// LOGIN DO PROFESSOR
+function loginProfessor() {
+  const loginInput = document.getElementById('profLoginNome').value.trim().toLowerCase();
+  const senhaInput = document.getElementById('profLoginSenha').value;
+
+  if (!loginInput || !senhaInput) return alert('Digite seu apelido/nome e senha.');
+
+  const profEncontrado = cadastrosProfs.find(p => 
+    (p.nome.toLowerCase() === loginInput || p.apelido.toLowerCase() === loginInput) && p.senha === senhaInput
+  );
+
+  if (profEncontrado) {
+    profLogado = profEncontrado.apelido || profEncontrado.nome;
+    document.getElementById('profInfo').innerHTML = `✅ Professor <strong>${profLogado}</strong> conectado (Filial: ${profEncontrado.filial})`;
+  } else {
+    alert('❌ Login ou senha incorretos! Se é seu primeiro acesso, faça a Inscrição.');
+  }
+}
 
 // COMPARTILHAR APK / APP NATIVO
 async function compartilharApp() {
@@ -329,12 +521,12 @@ function gerarAPK() {
   const blob = new Blob([htmlCompleto], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'UniversoCapoeira_v33.html';
+  a.download = 'UniversoCapoeira_v34.html';
   a.click();
   alert('📦 Arquivo base baixado! Suba esse arquivo no AppsGeyser.');
 }
 
-// CONTROLES DE ÁDIO / PLAYER
+// PLAYER E OUTRAS FUNÇÕES
 const player = document.getElementById('radioPlayer');
 const playBtn = document.getElementById('playBtn');
 let isPlaying = false;
@@ -378,18 +570,22 @@ function uploadArquivos() {
   }
 }
 
-function loginAluno() {
-  const nome = document.getElementById('alunoNome').value.trim();
-  if(!nome) return alert('Digite seu nome');
-  alunoLogado = nome;
-  document.getElementById('alunoInfo').innerHTML = `✅ Conectado como ${nome}`;
-  document.getElementById('alunoAviso').style.display = 'none';
-  document.getElementById('alunoConteudo').style.display = 'block';
+function adicionarFilial() {
+  const nome = document.getElementById('novaFilial').value.trim();
+  const gps = document.getElementById('gpsFilial').value.trim();
+  if (!nome || !gps) return alert('Preencha nome e GPS');
+  filiais.push({ nome, gps });
+  saveData('filiais', filiais);
+  carregarSelectFiliais();
+  alert('Filial adicionada!');
 }
 
 function atualizarApp() { alert('App atualizado!'); }
 function copiarHTMLAtual() { navigator.clipboard.writeText(document.documentElement.outerHTML); alert('HTML Copiado!'); }
 function salvarConfigGitHub() { saveData('githubConfig', { token: document.getElementById('githubToken').value, repo: document.getElementById('githubRepo').value }); alert('GitHub Salvo'); }
+
+// INICIALIZAÇÃO
+carregarSelectFiliais();
 </script>
 </body>
 </html>
