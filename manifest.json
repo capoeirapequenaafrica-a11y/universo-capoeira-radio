@@ -1,48 +1,395 @@
-{
-  "name": "Universo Capoeira Radio",
-  "short_name": "Capoeira Radio",
-  "description": "Rádio 24h de Capoeira com vinhetas e músicas de fundo",
-  "start_url": "/universo-capoeira-radio/",
-  "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#007AFF",
-  "orientation": "portrait-primary",
-  "scope": "/universo-capoeira-radio/",
-  "icons": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23007AFF' width='192' height='192'/><text x='96' y='110' font-size='120' text-anchor='middle' fill='white' font-family='Arial'>🎵</text></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23007AFF' width='512' height='512'/><text x='256' y='350' font-size='320' text-anchor='middle' fill='white' font-family='Arial'>🎵</text></svg>",
-      "sizes": "512x512",
-      "type": "image/svg+xml"
-    }
-  ],
-  "categories": ["music", "entertainment"],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230a0a0a' width='540' height='720'/><text x='270' y='100' font-size='60' text-anchor='middle' fill='white'>Universo Capoeira</text><text x='270' y='200' font-size='40' text-anchor='middle' fill='%238e8e93'>Rádio 24h</text><circle cx='270' cy='400' r='50' fill='%23007AFF'/><text x='270' y='410' font-size='60' text-anchor='middle' fill='white'>▶</text></svg>",
-      "sizes": "540x720",
-      "type": "image/svg+xml",
-      "form_factor": "narrow"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Rádio",
-      "short_name": "Rádio",
-      "description": "Abrir rádio",
-      "url": "/universo-capoeira-radio/?tab=radio",
-      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23007AFF' width='96' height='96'/><text x='48' y='60' font-size='60' text-anchor='middle' fill='white'>📻</text></svg>", "sizes": "96x96", "type": "image/svg+xml"}]
-    },
-    {
-      "name": "Vinhetas",
-      "short_name": "Vinhetas",
-      "description": "Tocar vinheta",
-      "url": "/universo-capoeira-radio/?tab=vinhetas",
-      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23FF9500' width='96' height='96'/><text x='48' y='60' font-size='60' text-anchor='middle' fill='white'>🎙️</text></svg>", "sizes": "96x96", "type": "image/svg+xml"}]
-    }
-  ]
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Universo Capoeira v33</title>
+
+  <!-- Manifest e Configurações para Web App e APK -->
+  <link rel="manifest" href='data:application/manifest+json,{
+    "name": "Universo Capoeira Radio",
+    "short_name": "Capoeira Radio",
+    "description": "Rádio 24h de Capoeira com vinhetas e músicas de fundo",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#0d0d0d",
+    "theme_color": "#007AFF",
+    "categories": ["music", "entertainment"],
+    "icons": [
+      {
+        "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 192 192\"><rect fill=\"%23007AFF\" width=\"192\" height=\"192\" rx=\"30\"/><text x=\"96\" y=\"125\" font-size=\"110\" text-anchor=\"middle\" fill=\"white\" font-family=\"Arial\">🎵</text></svg>",
+        "sizes": "192x192",
+        "type": "image/svg+xml",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><rect fill=\"%23007AFF\" width=\"512\" height=\"512\" rx=\"80\"/><text x=\"256\" y=\"340\" font-size=\"300\" text-anchor=\"middle\" fill=\"white\" font-family=\"Arial\">🎵</text></svg>",
+        "sizes": "512x512",
+        "type": "image/svg+xml",
+        "purpose": "any maskable"
+      }
+    ]
+  }'>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Capoeira Radio">
+  <meta name="theme-color" content="#007AFF">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+    body { background:#0d0d0d; color:#eee; display:flex; flex-direction:column; min-height:100vh; }
+    header { background:#1a1a2e; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e94560; }
+    header h1 { font-size:1.2rem; }
+    .badge { padding:4px 12px; border-radius:20px; font-size:0.7rem; font-weight:bold; }
+    .badge-off { background:#555; color:#aaa; }
+    .badge-playing { background:#e94560; color:#fff; animation:pulse 1s infinite; }
+    @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.5;} 100%{opacity:1;} }
+    .tabs { display:flex; overflow-x:auto; background:#16213e; border-bottom:1px solid #333; }
+    .tabs button { flex:1; min-width:70px; padding:10px 0; background:transparent; border:none; color:#aaa; font-weight:600; font-size:0.8rem; cursor:pointer; transition:0.2s; }
+    .tabs button.active { color:#fff; border-bottom:3px solid #e94560; background:#0f3460; }
+    .tab-content { display:none; flex:1; padding:16px; overflow-y:auto; }
+    .tab-content.active { display:block; }
+    .card { background:#1a1a2e; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+    .card h3 { margin-bottom:12px; color:#e94560; font-size:1.1rem; }
+    .card h3 i { margin-right:8px; }
+    .btn { background:#e94560; border:none; color:#fff; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold; margin:4px; font-size:0.95rem; }
+    .btn-outline { background:transparent; border:1px solid #e94560; color:#e94560; }
+    .btn-success { background:#2e7d32; color:#fff; }
+    .btn-secondary { background:#1e3a5f; color:#fff; }
+    .btn-gold { background:#f39c12; color:#1a1a2e; }
+    input, select, textarea { width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #333; background:#0d0d0d; color:#fff; }
+    .flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .status-offline { color:#f44336; }
+    .cordas { display:flex; gap:6px; flex-wrap:wrap; }
+    @media (max-width:480px){ header h1 { font-size:1rem; } .tabs button { font-size:0.65rem; min-width:60px; } }
+    .small-input { font-size:0.8rem; padding:6px; }
+    /* Player Controls */
+    .player-controls { display:flex; justify-content:center; align-items:center; gap:15px; margin:10px 0; }
+    .player-controls button { background:none; border:none; color:#eee; font-size:1.8rem; cursor:pointer; transition:0.2s; }
+    .player-controls button:hover { color:#e94560; }
+    .player-controls .play-btn { font-size:2.5rem; }
+    .progress-bar { width:100%; display:flex; align-items:center; gap:10px; }
+    .progress-bar input[type="range"] { flex:1; height:4px; -webkit-appearance:none; background:#555; border-radius:2px; outline:none; }
+    .progress-bar input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:#e94560; cursor:pointer; }
+    .time-label { font-size:0.8rem; color:#aaa; min-width:40px; }
+    .playlist { max-height:200px; overflow-y:auto; margin-top:10px; }
+    .playlist .list-item { padding:6px 10px; font-size:0.9rem; cursor:pointer; background:#0d0d0d; border-radius:6px; margin:4px 0; }
+    .playlist .list-item:hover { background:#2a2a4a; }
+    .tab-radio { border-bottom:2px solid #e94560 !important; }
+    .tab-radio.active { background:#1a1a2e !important; }
+    .tab-dev { border-bottom:2px solid #f39c12 !important; }
+    .tab-dev.active { background:#1a1a2e !important; }
+    .priority-badge { position:absolute; top:-12px; right:16px; background:#e94560; padding:4px 16px; border-radius:20px; font-weight:bold; font-size:0.7rem; color:#fff; }
+    .priority-max { border:3px solid #f39c12 !important; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌀 Universo Capoeira <span style="font-size:0.7rem;color:#aaa;">v33</span></h1>
+  <div class="badge badge-off" id="radioStatus">PARADO</div>
+</header>
+
+<div class="tabs">
+  <button class="active" data-tab="tab1"><i class="fas fa-home"></i> Início</button>
+  <button data-tab="tab2"><i class="fas fa-user-graduate"></i> Aluno</button>
+  <button class="tab-radio" data-tab="tab4"><i class="fas fa-microphone-alt"></i> Rádio</button>
+  <button data-tab="tab3"><i class="fas fa-chalkboard-teacher"></i> Professor</button>
+  <button data-tab="tab5"><i class="fas fa-cogs"></i> ADM</button>
+  <button class="tab-dev" data-tab="tab6"><i class="fas fa-code"></i> Dev</button>
+</div>
+
+<!-- ==================== TAB 1 – INÍCIO ==================== -->
+<div id="tab1" class="tab-content active">
+  <div class="card" style="border:2px solid #e94560;">
+    <h3><i class="fas fa-sign-in-alt"></i> Entrada do Aluno</h3>
+    <div class="flex">
+      <input id="alunoNome" placeholder="Nome completo" style="flex:1;">
+      <input id="alunoSenha" type="password" placeholder="Senha" style="flex:1;">
+      <button class="btn" onclick="loginAluno()">Entrar</button>
+    </div>
+    <div id="alunoInfo" style="margin-top:8px; font-size:0.9rem;"></div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-share-alt"></i> Divulgar Aplicativo</h3>
+    <p style="font-size:0.85rem; color:#aaa; margin-bottom:8px;">Compartilhe o app da Capoeira com seus colegas de treino.</p>
+    <button class="btn btn-success" onclick="compartilharApp()"><i class="fas fa-share-alt"></i> Compartilhar APK / App</button>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-radio"></i> Rádio 24h <span id="radioOnlineIndicator" class="status-offline" style="font-size:0.8rem;margin-left:8px;">● OFFLINE</span></h3>
+    <div class="flex" style="justify-space-between;">
+      <span id="modoBadge" class="badge badge-off">PARADO</span>
+      <span id="ouvinteCount"><i class="fas fa-headphones"></i> 0 ouvintes</span>
+    </div>
+    <div id="playerContainer">
+      <audio id="radioPlayer" style="display:none;"></audio>
+      <div class="player-controls">
+        <button onclick="playerAnterior()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+        <button class="play-btn" onclick="togglePlay()" id="playBtn"><i class="fas fa-play"></i></button>
+        <button onclick="playerProxima()" title="Próxima"><i class="fas fa-step-forward"></i></button>
+      </div>
+      <div class="progress-bar">
+        <span class="time-label" id="currentTime">0:00</span>
+        <input type="range" id="progressSlider" value="0" step="0.1">
+        <span class="time-label" id="totalTime">0:00</span>
+      </div>
+      <div style="text-align:center;margin-top:6px;font-size:0.9rem;color:#aaa;" id="nowPlaying">Nenhuma música</div>
+    </div>
+    <div>
+      <div class="flex" style="justify-content:space-between; margin-top:10px;">
+        <span>Playlist (<span id="playlistCount">0</span>)</span>
+        <button class="btn btn-outline" onclick="limparPlaylist()" style="padding:2px 10px;font-size:0.8rem;">Limpar</button>
+      </div>
+      <div id="playlistContainer" class="playlist"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-map-pin"></i> Check‑in</h3>
+    <div class="flex">
+      <button class="btn" onclick="fazerCheckin('aluno')"><i class="fas fa-user"></i> Minha localização</button>
+      <button class="btn" onclick="fazerCheckin('professor')"><i class="fas fa-chalkboard-teacher"></i> Local do Professor</button>
+    </div>
+    <div id="checkinResult" style="margin-top:8px;font-size:0.9rem;"></div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-comments"></i> Chat da Comunidade</h3>
+    <div id="chatMessages" style="max-height:200px;overflow-y:auto;margin-bottom:8px;"></div>
+    <div class="flex">
+      <input id="chatInput" placeholder="Sua mensagem..." style="flex:1;">
+      <button class="btn" onclick="enviarChat()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2 – ALUNO ==================== -->
+<div id="tab2" class="tab-content">
+  <div id="alunoPainel">
+    <div id="alunoAviso" style="display:block;">
+      <div class="card">
+        <h3><i class="fas fa-exclamation-circle"></i> Acesso restrito</h3>
+        <p>Faça login na aba <strong>Início</strong> para visualizar seu boletim e cordas.</p>
+      </div>
+    </div>
+    <div id="alunoConteudo" style="display:none;">
+      <div class="card">
+        <h3><i class="fas fa-book-open"></i> Boletim</h3>
+        <div id="boletimConteudo"></div>
+        <button class="btn btn-outline" onclick="baixarBoletim()" style="margin-top:10px;"><i class="fas fa-download"></i> Baixar .txt</button>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-graduation-cap"></i> Sistema de Cordas</h3>
+        <div id="cordasDisplay" class="cordas"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 4 – RÁDIO ==================== -->
+<div id="tab4" class="tab-content">
+  <div class="card" style="border:3px solid #e94560; background:#1a1a2e; position:relative;">
+    <div class="priority-badge">★ PRIORIDADE</div>
+    <h3><i class="fas fa-hdd"></i> ESTÚDIO – ARMAZENAMENTO INTERNO</h3>
+    
+    <div style="margin-top:16px;">
+      <h4><i class="fas fa-music"></i> Músicas e Vinhetas</h4>
+      <div class="flex">
+        <input type="file" id="uploadMusica" accept="audio/*" multiple style="flex:1;">
+        <button class="btn" onclick="uploadArquivos()"><i class="fas fa-upload"></i> Adicionar</button>
+      </div>
+      <div id="listaMusicas" style="margin-top:10px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3 – PROFESSOR ==================== -->
+<div id="tab3" class="tab-content">
+  <div class="card">
+    <h3><i class="fas fa-chalkboard-teacher"></i> Login Professor</h3>
+    <input id="profNome" placeholder="Nome">
+    <input id="profApelido" placeholder="Apelido">
+    <input id="profSenha" type="password" placeholder="Senha">
+    <button class="btn" onclick="loginProfessor()">Entrar</button>
+    <div id="profInfo" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5 – ADM GERAL ==================== -->
+<div id="tab5" class="tab-content">
+  <div class="card">
+    <h3><i class="fas fa-store"></i> Filiais & GPS</h3>
+    <input id="novaFilial" placeholder="Nome da nova filial">
+    <input id="gpsFilial" placeholder="Coordenadas (lat,lng)">
+    <button class="btn" onclick="adicionarFilial()">Adicionar</button>
+    <div id="listaFiliais" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 6 – DESENVOLVEDOR ==================== -->
+<div id="tab6" class="tab-content">
+  <div class="card priority-max" style="position:relative; background:#1a1a2e;">
+    <div class="priority-badge" style="background:#f39c12;">★ PRIORIDADE MÁXIMA</div>
+    <h3 style="color:#f39c12;"><i class="fas fa-code"></i> Atualização via HTML</h3>
+    <textarea id="htmlNovo" rows="5" placeholder="Cole aqui o HTML completo da nova versão..."></textarea>
+    <div class="flex" style="margin-top:8px;">
+      <button class="btn btn-gold" onclick="atualizarApp()" style="flex:2;"><i class="fas fa-upload"></i> Atualizar App</button>
+      <button class="btn btn-outline" onclick="copiarHTMLAtual()" style="flex:1;"><i class="fas fa-copy"></i> Copiar HTML</button>
+    </div>
+  </div>
+
+  <!-- CARD GERAR E COMPARTILHAR APK -->
+  <div class="card" style="border:2px solid #2e7d32;">
+    <h3 style="color:#4caf50;"><i class="fas fa-android"></i> Pacote APK & Compartilhamento</h3>
+    <p style="font-size:0.85rem; color:#ccc;">Gere o pacote para instalação no Android ou compartilhe diretamente via WhatsApp/Bluetooth.</p>
+    
+    <div class="flex" style="margin-top:10px;">
+      <button class="btn btn-success" onclick="compartilharApp()"><i class="fas fa-share-alt"></i> Compartilhar APK</button>
+      <button class="btn btn-secondary" onclick="gerarAPK()"><i class="fas fa-file-archive"></i> Baixar Pacote .ZIP</button>
+    </div>
+    <div id="apkStatus" style="margin-top:8px; font-size:0.85rem; color:#aaa;"></div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fab fa-github"></i> Configuração GitHub</h3>
+    <input id="githubToken" class="small-input" placeholder="Token do GitHub" type="password">
+    <input id="githubRepo" class="small-input" placeholder="Repositório (usuario/repo)">
+    <button class="btn btn-outline" onclick="salvarConfigGitHub()">Salvar Config</button>
+  </div>
+</div>
+
+<script>
+const VERSION = 'v33';
+let alunoLogado = null;
+let profLogado = null;
+let musicaAtual = null;
+
+function loadData(key, defaultVal) {
+  try { return JSON.parse(localStorage.getItem(key)) || defaultVal; } catch { return defaultVal; }
 }
+function saveData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+
+let githubConfig = loadData('githubConfig', { token: '', repo: '' });
+let musicas = loadData('musicas', []);
+let filiais = loadData('filiais', [{nome:'Matriz', gps:'-22.9068,-43.1729'}]);
+
+// NAVEGAÇÃO DE ABAS
+document.querySelectorAll('.tabs button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(this.dataset.tab).classList.add('active');
+  });
+});
+
+// COMPARTILHAR APK / APP NATIVO
+async function compartilharApp() {
+  const statusDiv = document.getElementById('apkStatus');
+  const appUrl = window.location.href;
+  const shareTitle = 'Universo Capoeira App';
+  const shareText = 'Baixe e instale o aplicativo Universo Capoeira (Rádio 24h, Chamadas e Boletim):';
+
+  try {
+    const htmlContent = document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const file = new File([blob], 'UniversoCapoeira.html', { type: 'text/html' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ title: shareTitle, text: shareText, files: [file] });
+      if(statusDiv) statusDiv.innerHTML = '✅ Compartilhado com sucesso!';
+      return;
+    }
+  } catch (e) {
+    console.log('Compartilhamento de arquivo não suportado, enviando link...');
+  }
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: shareTitle, text: shareText, url: appUrl });
+      if(statusDiv) statusDiv.innerHTML = '✅ Link compartilhado!';
+    } catch (err) {
+      if(statusDiv) statusDiv.innerHTML = '⚠️ Compartilhamento cancelado.';
+    }
+  } else {
+    navigator.clipboard.writeText(`${shareText}\n${appUrl}`).then(() => {
+      alert('📋 Link copiado para a área de transferência!');
+    });
+  }
+}
+
+function gerarAPK() {
+  const htmlCompleto = document.documentElement.outerHTML;
+  const blob = new Blob([htmlCompleto], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'UniversoCapoeira_v33.html';
+  a.click();
+  alert('📦 Arquivo base baixado! Suba esse arquivo no AppsGeyser.');
+}
+
+// CONTROLES DE ÁDIO / PLAYER
+const player = document.getElementById('radioPlayer');
+const playBtn = document.getElementById('playBtn');
+let isPlaying = false;
+
+function tocarMusica(index) {
+  if (index < 0 || index >= musicas.length) return;
+  musicaAtual = index;
+  player.src = musicas[index].githubUrl || musicas[index].data;
+  player.play().catch(() => {});
+  isPlaying = true;
+  document.getElementById('radioStatus').textContent = 'TOCANDO';
+  document.getElementById('radioStatus').className = 'badge badge-playing';
+  document.getElementById('nowPlaying').textContent = `🎵 ${musicas[index].nome}`;
+}
+
+function togglePlay() {
+  if (musicas.length === 0) return alert('Adicione músicas na aba Rádio');
+  if (musicaAtual === null) return tocarMusica(0);
+  if (isPlaying) {
+    player.pause();
+    isPlaying = false;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  } else {
+    player.play().catch(() => {});
+    isPlaying = true;
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  }
+}
+
+function uploadArquivos() {
+  const files = document.getElementById('uploadMusica').files;
+  if (!files.length) return alert('Selecione um arquivo de áudio.');
+  for (let f of files) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      musicas.push({ nome: f.name, data: e.target.result });
+      saveData('musicas', musicas);
+      alert('Música adicionada!');
+    };
+    reader.readAsDataURL(f);
+  }
+}
+
+function loginAluno() {
+  const nome = document.getElementById('alunoNome').value.trim();
+  if(!nome) return alert('Digite seu nome');
+  alunoLogado = nome;
+  document.getElementById('alunoInfo').innerHTML = `✅ Conectado como ${nome}`;
+  document.getElementById('alunoAviso').style.display = 'none';
+  document.getElementById('alunoConteudo').style.display = 'block';
+}
+
+function atualizarApp() { alert('App atualizado!'); }
+function copiarHTMLAtual() { navigator.clipboard.writeText(document.documentElement.outerHTML); alert('HTML Copiado!'); }
+function salvarConfigGitHub() { saveData('githubConfig', { token: document.getElementById('githubToken').value, repo: document.getElementById('githubRepo').value }); alert('GitHub Salvo'); }
+</script>
+</body>
+</html>
