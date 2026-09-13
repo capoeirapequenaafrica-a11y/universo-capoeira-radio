@@ -311,6 +311,7 @@ select.campo{appearance:none;}
       <div class="rack-titulo"><span class="icone">⚙️</span> Configurações (GitHub)</div>
       <input class="campo" id="inputGithubDono" placeholder="Usuário/organização GitHub (ex: capoeirapequenaafrica-a11y)">
       <input class="campo" id="inputGithubRepo" placeholder="Nome do repositório">
+      <input class="campo" id="inputGithubBranch" placeholder="Nome da branch (ex: principal)">
       <input class="campo" id="inputGithubToken" placeholder="Token de acesso pessoal (PAT)" type="password">
       <button class="btn" id="btnSalvarConfigGithub">Salvar configuração</button>
       <div class="aviso-texto">O token fica salvo só neste aparelho. Ele precisa da permissão "repo" no GitHub para poder enviar os arquivos de música.</div>
@@ -369,6 +370,7 @@ function pegarConfigLocal(){
   return {
     githubDono: localStorage.getItem('rpa_github_dono') || '',
     githubRepo: localStorage.getItem('rpa_github_repo') || '',
+    githubBranch: localStorage.getItem('rpa_github_branch') || 'main',
     githubToken: localStorage.getItem('rpa_github_token') || '',
     elevenKey: localStorage.getItem('rpa_eleven_key') || '',
     elevenVoiceId: localStorage.getItem('rpa_eleven_voice') || ''
@@ -618,6 +620,7 @@ function carregarConfigGithubNosCampos(){
   const c = pegarConfigLocal();
   document.getElementById('inputGithubDono').value = c.githubDono;
   document.getElementById('inputGithubRepo').value = c.githubRepo;
+  document.getElementById('inputGithubBranch').value = c.githubBranch;
   document.getElementById('inputGithubToken').value = c.githubToken;
   document.getElementById('inputElevenKey').value = c.elevenKey;
   document.getElementById('inputElevenVoiceId').value = c.elevenVoiceId;
@@ -625,6 +628,7 @@ function carregarConfigGithubNosCampos(){
 document.getElementById('btnSalvarConfigGithub').addEventListener('click', ()=>{
   localStorage.setItem('rpa_github_dono', document.getElementById('inputGithubDono').value.trim());
   localStorage.setItem('rpa_github_repo', document.getElementById('inputGithubRepo').value.trim());
+  localStorage.setItem('rpa_github_branch', document.getElementById('inputGithubBranch').value.trim() || 'main');
   localStorage.setItem('rpa_github_token', document.getElementById('inputGithubToken').value.trim());
   mostrarToast('Configuração do GitHub salva neste aparelho');
 });
@@ -674,12 +678,13 @@ async function enviarArquivoParaGithub(file, caminhoNoRepo){
     throw new Error('Falha ao enviar para o GitHub: ' + erro);
   }
   // link servido via jsDelivr (CDN grátis, com CORS liberado — melhor pra tocar áudio que o raw.githubusercontent)
-  const linkJsDelivr = `https://cdn.jsdelivr.net/gh/${cfg.githubDono}/${cfg.githubRepo}@main/${caminhoNoRepo}`;
+  const branch = cfg.githubBranch || 'main';
+  const linkJsDelivr = `https://cdn.jsdelivr.net/gh/${cfg.githubDono}/${cfg.githubRepo}@${branch}/${caminhoNoRepo}`;
 
   // força o CDN a buscar a versão nova agora, em vez de esperar o cache expirar sozinho
   // (sem isso, o arquivo recém-enviado pode demorar a aparecer em outros aparelhos)
   try{
-    await fetch(`https://purge.jsdelivr.net/gh/${cfg.githubDono}/${cfg.githubRepo}@main/${caminhoNoRepo}`);
+    await fetch(`https://purge.jsdelivr.net/gh/${cfg.githubDono}/${cfg.githubRepo}@${branch}/${caminhoNoRepo}`);
   }catch(e){ /* purge é só uma otimização — se falhar, o áudio ainda funciona, só demora um pouco mais a propagar */ }
 
   return linkJsDelivr;
